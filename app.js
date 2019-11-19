@@ -2,7 +2,9 @@ const express = require('express')
 const app = express()
 const path = require('path')
 const bodyParser = require('body-parser')
-const fs = require('fs')
+const fs = require('fs') 
+
+var curruser = null
 
 app.use(express.static('public'))
 app.set('view engine', 'ejs')
@@ -26,6 +28,24 @@ let addUser = function(user){
     fs.writeFileSync('users.json', JSON.stringify(users))
 }
 
+let loadWatchlist = function(){
+    try {
+        let bufferedData = fs.readFileSync('watchlist.json')
+        let dataString = bufferedData.toString()
+        let watchlistArray = JSON.parse(dataString)
+        return watchlistArray
+    } catch (error) {
+        return []
+    }
+}
+
+let addMovie = function(movie){
+    let watchlistArray = loadWatchlist()
+    watchlistArray.push(movie)
+    fs.writeFileSync('watchlist.json', JSON.stringify(watchlistArray))
+}
+
+
 app.get('/', function(req,res){
     res.redirect('/login')
 })
@@ -40,40 +60,111 @@ app.get('/registration', function(req,res){
     })
 })
 
-app.get('/home/', function(req,res){
+app.get('/home', function(req,res){
+    if(curruser!=null){
     res.render('home')
+    }
+    else{
+        res.redirect('/login')
+    }
 })
 
 app.get('/action', function(req,res){
-    res.render('action')
+    if(curruser!=null){
+        res.render('action')
+        }
+        else{
+            res.redirect('/login')
+        }
 })
 app.get('/horror', function(req,res){
-    res.render('horror')
+    if(curruser!=null){
+        res.render('horror')
+        }
+        else{
+            res.redirect('/login')
+        }
 })
 app.get('/drama', function(req,res){
-    res.render('drama')
+    if(curruser!=null){
+        res.render('drama')
+        }
+        else{
+            res.redirect('/login')
+        }
 })
 app.get('/fightclub', function(req,res){
-    res.render('fightclub')
+    if(curruser!=null){
+        res.render('fightclub')
+        }
+        else{
+            res.redirect('/login')
+        }
 })
 app.get('/conjuring', function(req,res){
-    res.render('conjuring')
+    if(curruser!=null){
+        res.render('conjuring')
+        }
+        else{
+            res.redirect('/login')
+        }
 })
 app.get('/scream', function(req,res){
-    res.render('scream')
+    if(curruser!=null){
+        res.render('scream')
+        }
+        else{
+            res.redirect('/login')
+        }
 })
 app.get('/godfather', function(req,res){
-    res.render('godfather')
+    if(curruser!=null){
+        res.render('godfather')
+        }
+        else{
+            res.redirect('/login')
+        }
 })
 app.get('/godfather2', function(req,res){
-    res.render('godfather2')
+    if(curruser!=null){
+        res.render('godfather2')
+        }
+        else{
+            res.redirect('/login')
+        }
 })
 app.get('/darkknight', function(req,res){
-    res.render('darkknight')
+    if(curruser!=null){
+        res.render('darkknight',{message:""})
+        }
+        else{
+            res.redirect('/login')
+        }
 })
 app.post('/darkknight',function(req,res){
-    console.log('hello')
+
+    var movie = {
+        user:curruser,
+        name:"darkKnight"
+    }
+    var watchlistArray = loadWatchlist()
+    var found = false
+    for(var i=0 ; i<watchlistArray.length ;i++){
+        if(watchlistArray[i].user == movie.user && watchlistArray[i].name == movie.name){
+            found = true
+            break;
+        }
+    }
+    if(found){
+        res.render('darkknight',{message:"movie already in your Watchlist"})
+    }
+    else{
+        addMovie(movie)
+        res.render('darkknight',{message:""})
+    }
+    
 })    
+
 var movies=['darkknight','fightclub','conjuring','scream','godfather','godfather2']
 
 app.post('/search',function(req,res){
@@ -109,6 +200,7 @@ app.post('/login',function(req,res){
             found=true
             if(users_arr[i].password == pass){
                 res.redirect('/home')
+                curruser=user_name
             }
             else{
                 res.render('login',{message:'wrong password'})
