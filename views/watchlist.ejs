@@ -13,6 +13,23 @@
             text-align: center;
             -webkit-text-stroke: 1px blue;
         }
+        img.jpg{
+            border-radius: 50%;
+        }
+        ol.mylist{
+            color: white;
+            font-size: 25px;
+        }
+        h5.mytext{
+            display: inline-block;
+        }
+        h2.error{
+            color: white;
+        }
+        div.mydiv{
+           display: inline-block;
+        }
+        
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,5 +55,29 @@
             </form>
         </div>
     </nav>
+
+    <% if (mywatchlist.length==0) { %>
+        <h2 class="error">Watch List is Empty</h2>
+      <% } %>
+    
+    <ol type="1" class="mylist">
+
+        <% for(var i=0; i<mywatchlist.length; i++) { %>
+            <li> 
+                <div class="mydiv" onclick="location.href = '/<%-mywatchlist[i].path%>'">
+        
+                    <img id="image" src="/<%-mywatchlist[i].path%>.jpg" class="jpg"  width="5%" height="4%">
+                     <h5 class="mytext"><%-mywatchlist[i].name%></h5>
+                
+                </div>
+            
+            </li>
+            <br>
+            <% }; %>
+    
+    </ol>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>

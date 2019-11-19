@@ -45,6 +45,10 @@
         #my {
             zoom: 110%;
         }
+        div.mess{
+            color: red;
+            font-size: 12px;
+        }
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,7 +82,10 @@
         A year after the murder of her mother, a teenage girl is terrorized by a new killer, who targets the girl and her friends by using horror films as part of a deadly game.
     </div>
     <div class="watchlist">
+        <form method="POST">
         <button id="watchlist" class="btn btn-secondary ml-3">Add to Watchlist</button>
+    </form>
+    <div class="mess"><%-message%></div>
     </div>
     <div class="trailer">
         <video width="480" height="360" controls>
@@ -87,5 +94,4 @@
     </div>
 
 </body>
-
 </html>

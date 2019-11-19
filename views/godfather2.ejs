@@ -44,6 +44,10 @@
         #my {
             zoom: 110%;
         }
+        div.mess{
+            color: red;
+            font-size: 12px;
+        }
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -76,7 +80,10 @@
             The early life and career of Vito Corleone in 1920s New York City is portrayed, while his son, Michael, expands and tightens his grip on the family crime syndicate.
     </div>
     <div class="watchlist">
+         <form method="POST">
         <button id="watchlist" class="btn btn-secondary ml-3">Add to Watchlist</button>
+        </form>
+    <div class="mess"><%-message%></div>
     </div>
     <div class="trailer">
         <video width="480" height="360" controls>

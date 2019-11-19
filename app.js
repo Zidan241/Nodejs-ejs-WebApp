@@ -1,10 +1,11 @@
 const express = require('express')
+const session = require('express-session');
 const app = express()
 const path = require('path')
 const bodyParser = require('body-parser')
 const fs = require('fs') 
 
-var curruser = null
+app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true}));
 
 app.use(express.static('public'))
 app.set('view engine', 'ejs')
@@ -39,6 +40,18 @@ let loadWatchlist = function(){
     }
 }
 
+let getuserwatch = function(name){
+    var userwatch=[]
+    var watchlist= loadWatchlist()
+        for(var i=0; i<watchlist.length; i++){
+            if(watchlist[i].user==name)
+            userwatch.push(watchlist[i])
+        }
+    return userwatch
+}
+
+
+
 let addMovie = function(movie){
     let watchlistArray = loadWatchlist()
     watchlistArray.push(movie)
@@ -61,7 +74,7 @@ app.get('/registration', function(req,res){
 })
 
 app.get('/home', function(req,res){
-    if(curruser!=null){
+    if(req.session.username){
     res.render('home')
     }
     else{
@@ -70,7 +83,7 @@ app.get('/home', function(req,res){
 })
 
 app.get('/action', function(req,res){
-    if(curruser!=null){
+    if(req.session.username){
         res.render('action')
         }
         else{
@@ -78,7 +91,7 @@ app.get('/action', function(req,res){
         }
 })
 app.get('/horror', function(req,res){
-    if(curruser!=null){
+    if(req.session.username){
         res.render('horror')
         }
         else{
@@ -86,7 +99,7 @@ app.get('/horror', function(req,res){
         }
 })
 app.get('/drama', function(req,res){
-    if(curruser!=null){
+    if(req.session.username){
         res.render('drama')
         }
         else{
@@ -94,58 +107,66 @@ app.get('/drama', function(req,res){
         }
 })
 app.get('/fightclub', function(req,res){
-    if(curruser!=null){
-        res.render('fightclub')
+    if(req.session.username){
+        res.render('fightclub', {message:""})
         }
         else{
             res.redirect('/login')
         }
 })
 app.get('/conjuring', function(req,res){
-    if(curruser!=null){
-        res.render('conjuring')
+    if(req.session.username){
+        res.render('conjuring', {message:""})
         }
         else{
             res.redirect('/login')
         }
 })
 app.get('/scream', function(req,res){
-    if(curruser!=null){
-        res.render('scream')
+    if(req.session.username){
+        res.render('scream', {message:""})
         }
         else{
             res.redirect('/login')
         }
 })
 app.get('/godfather', function(req,res){
-    if(curruser!=null){
-        res.render('godfather')
+    if(req.session.username){
+        res.render('godfather', {message:""})
         }
         else{
             res.redirect('/login')
         }
 })
 app.get('/godfather2', function(req,res){
-    if(curruser!=null){
-        res.render('godfather2')
+    if(req.session.username){
+        res.render('godfather2', {message:""})
         }
         else{
             res.redirect('/login')
         }
 })
 app.get('/darkknight', function(req,res){
-    if(curruser!=null){
+    if(req.session.username){
         res.render('darkknight',{message:""})
         }
         else{
             res.redirect('/login')
-        }
+        }   
 })
+
+app.get('/watchlist', function(req, res){
+    res.render('watchlist', {
+        mywatchlist : getuserwatch(req.session.username)
+    })
+})
+
 app.post('/darkknight',function(req,res){
 
     var movie = {
-        user:curruser,
-        name:"darkKnight"
+        user: req.session.username,
+        name:"The Dark Knight (2008)",
+        path:"darkknight"
     }
     var watchlistArray = loadWatchlist()
     var found = false
@@ -156,14 +177,139 @@ app.post('/darkknight',function(req,res){
         }
     }
     if(found){
-        res.render('darkknight',{message:"movie already in your Watchlist"})
+        res.render('darkknight',{message:"This movie is already in your watchlist"})
     }
     else{
         addMovie(movie)
-        res.render('darkknight',{message:""})
+        res.render('darkknight',{message:"This movie has been added to your watchlist"})
+    }
+    
+})
+
+ app.post('/fightclub',function(req,res){
+
+    var movie = {
+        user: req.session.username,
+        name:"Fight Club (1999)",
+        path:"fightclub"
+    }
+    var watchlistArray = loadWatchlist()
+    var found = false
+    for(var i=0 ; i<watchlistArray.length ;i++){
+        if(watchlistArray[i].user == movie.user && watchlistArray[i].name == movie.name){
+            found = true
+            break;
+        }
+    }
+    if(found){
+        res.render('fightclub',{message:"This movie is already in your watchlist"})
+    }
+    else{
+        addMovie(movie)
+        res.render('fightclub',{message:"This movie has been added to your watchlist"})
+    }
+    
+})
+
+app.post('/conjuring',function(req,res){
+
+    var movie = {
+        user: req.session.username,
+        name:"The Conjuring (2013)",
+        path:"conjuring"
+    }
+    var watchlistArray = loadWatchlist()
+    var found = false
+    for(var i=0 ; i<watchlistArray.length ;i++){
+        if(watchlistArray[i].user == movie.user && watchlistArray[i].name == movie.name){
+            found = true
+            break;
+        }
+    }
+    if(found){
+        res.render('conjuring',{message:"This movie is already in your watchlist"})
+    }
+    else{
+        addMovie(movie)
+        res.render('conjuring',{message:"This movie has been added to your watchlist"})
     }
     
 })    
+
+app.post('/scream',function(req,res){
+
+    var movie = {
+        user: req.session.username,
+        name:"Scream (1996)",
+        path:"scream"
+    }
+    var watchlistArray = loadWatchlist()
+    var found = false
+    for(var i=0 ; i<watchlistArray.length ;i++){
+        if(watchlistArray[i].user == movie.user && watchlistArray[i].name == movie.name){
+            found = true
+            break;
+        }
+    }
+    if(found){
+        res.render('scream',{message:"This movie is already in your watchlist"})
+    }
+    else{
+        addMovie(movie)
+        res.render('scream',{message:"This movie has been added to your watchlist"})
+    }
+    
+})
+
+app.post('/godfather',function(req,res){
+
+    var movie = {
+        user: req.session.username,
+        name:"The Godfather (1972)",
+        path:"godfather"
+    }
+    var watchlistArray = loadWatchlist()
+    var found = false
+    for(var i=0 ; i<watchlistArray.length ;i++){
+        if(watchlistArray[i].user == movie.user && watchlistArray[i].name == movie.name){
+            found = true
+            break;
+        }
+    }
+    if(found){
+        res.render('godfather',{message:"This movie is already in your watchlist"})
+    }
+    else{
+        addMovie(movie)
+        res.render('godfather',{message:"This movie has been added to your watchlist"})
+    }
+    
+})
+
+app.post('/godfather2',function(req,res){
+
+    var movie = {
+        user: req.session.username,
+        name:"The Godfather: Part II (1974)",
+        path:"godfather2"
+    }
+    var watchlistArray = loadWatchlist()
+    var found = false
+    for(var i=0 ; i<watchlistArray.length ;i++){
+        if(watchlistArray[i].user == movie.user && watchlistArray[i].name == movie.name){
+            found = true
+            break;
+        }
+    }
+    if(found){
+        res.render('godfather2',{message:"This movie is already in your watchlist"})
+    }
+    else{
+        addMovie(movie)
+        res.render('godfather2',{message:"This movie has been added to your watchlist"})
+    }
+    
+})
 
 var movies=['darkknight','fightclub','conjuring','scream','godfather','godfather2']
 
@@ -199,8 +345,8 @@ app.post('/login',function(req,res){
         if(users_arr[i].username == user_name){
             found=true
             if(users_arr[i].password == pass){
+                req.session.username=user_name
                 res.redirect('/home')
-                curruser=user_name
             }
             else{
                 res.render('login',{message:'wrong password'})
