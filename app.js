@@ -378,7 +378,7 @@ app.post('/register',function(req,res){
     }
     if(!flag && user_name!='' && pass!=''){
         addUser(user);
-        setTimeout(function(){res.redirect('/login')} , 5000);
+        setTimeout(function(){res.redirect('/login')} , 3000);
     }
 })
 
