@@ -311,14 +311,17 @@ app.post('/godfather2',function(req,res){
     
 })
 
-var movies=['darkknight','fightclub','conjuring','scream','godfather','godfather2']
+var movies=[{path:'darkknight',name:'The Dark Knight (2008)'},{path:'fightclub',name:'Fight Club (1999)'},{path:'conjuring',name:'The Conjuring (2013)'},{path:'scream',name:'Scream (1996)'},{path:'godfather',name:'The Godfather (1972)'},{path:'godfather2',name:'The Godfather: Part II (1974)'}]
 
 app.post('/search',function(req,res){
     var str = req.body.Search
     var sentarr=[]
     var flag = false
     for(var i = 0 ; i<movies.length ; i++){
-        if(movies[i].includes(str)){
+        var str1 = movies[i].name.toLocaleLowerCase()
+        var str2 = movies[i].path
+        var searchItem = str.toLocaleLowerCase()
+        if(str1.includes(searchItem) || str2.includes(searchItem)){
             sentarr.push(movies[i])
             flag=true
         }

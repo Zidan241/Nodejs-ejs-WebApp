@@ -62,10 +62,10 @@
     <ol type="1" class="mylist">
         <% for(var i =0;i<array.length ;i++){ %>
           <li>
-                <div onclick="location.href = '/<%-array[i]%>'" class="mydiv">
+                <div onclick="location.href = '/<%-array[i].path%>'" class="mydiv">
         
-                    <img id="image" src="/<%-array[i]%>.jpg" class="jpg"  width="5%" height="4%">
-                     <h5 class="mytext"><%-array[i]%></h5>
+                    <img id="image" src="/<%-array[i].path%>.jpg" class="jpg"  width="5%" height="4%">
+                     <h5 class="mytext"><%-array[i].name%></h5>
                 
                 </div>
             </li>
