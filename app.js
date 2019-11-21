@@ -324,6 +324,7 @@ app.post('/search',function(req,res){
         if(str1.includes(searchItem) || str2.includes(searchItem)){
             sentarr.push(movies[i])
             flag=true
+            
         }
     }
     if(!flag){
